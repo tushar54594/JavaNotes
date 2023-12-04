@@ -1,0 +1,953 @@
+** ------------------
+How to run Java code:
+javac Hello.java(file name)
+java Hello(class name)
+
+** ------------------
+Java is a strongly typed language
+
+** ------------------
+By default, Java supports double values
+double x = 6.5;
+If we want to use float, then we have to explicitly specify
+float num = 6.5f;
+
+** ------------------
+Java follows Unicode and not Ascii
+char -> 2bytes
+Internally, Java uses the Unicode character set. Unicode is a two-byte extension of the one-byte ISO Latin-1 character set, which in turn is an eight-bit superset of the seven-bit ASCII character set.
+
+** ------------------
+boolean -> true or false (Not 0 or 1)
+In java, true does not mean 1 and false 0.
+
+** ------------------
+Working with binary no:
+int num = 0b101; (5) -> we have to put 0b prefix
+System.out.println(num); //output: 5
+
+Working with Hexadecimal no:
+int num = 0x7E; -> we have to put 0x prefix
+System.out.println(num); //output: 126
+
+** ------------------
+Type conversion and casting
+byte b = 127;
+int a = 12;
+
+b = a; --> this will give an error. 
+We have to do explicit type conversion. This is known as type casting
+b = (byte)a;
+
+a = b; --> correct: we can put a small item in a bigger box but reverse not possible
+This is implicit type conversion
+
+
+Now let's say
+byte b = 127;
+int a = 257;
+
+b = (byte)a; 
+But byte can only store no in the range: -128 to 127(total 256 numbers)
+so it will do modulo with 256
+thus b = 257%256 = 1;
+thus b will store 1
+
+** ------------------
+Stack and Heap memory
+Instance variables and objects -> Part of Heap
+Local variables and address of object -> Part of stack 
+
+** ------------------
+--Array:
+int nums[] = {3,5,7};
+int nums[] = new int[4];  -->by default, values will be 0
+length of array : nums.length;
+
+--Multi-dimensional Array:
+int nums[][] = new int[][];
+
+for(int n[] : nums){
+    for(int m : n){
+        System.out.println(m);
+    }
+}
+
+--Jagged Array:
+no of elements in every row is not same
+int nums[][] = new int[3][];
+specify the no of elements in each row
+
+** ------------------
+String:
+String name = "Tushar";
+String name = new String("Tushar");
+string is basically an object that represents sequence of char values
+
+String s1 = "Tushar";
+String s2 = "Tushar";
+--Here only 1 object is created and both s1 and s2 point to the same object
+
+Inside heap, we have a special area called --> string constant pool
+
+Every string in java is a constant. we can't change it
+Every time we are creating a new variable, it checks if it is already present in the string constant pool. If Yes, then new one is not created otherwise it is created.
+
+--Imp
+String name = "Tushar";
+name  = name + " Pathak";
+
+Here name is not changed. A new object Tushar Pathak is created in the string constant pool and name now points to it.
+After we don't have access to "Tushar" and it will be garbage collected after some time
+
+Thus, by default Strings are immutable
+
+** ------------------
+StringBuffer
+--It is mutable
+--It provides an alternative to the immutable String class, allowing you to modify the contents of a string without creating a new object every time.
+
+StringBuffer sb = new StringBuffer("Tushar");
+sb.append("Pathak");
+
+StringBuffer is Thread Safe and StringBuilder is not.
+
+** ------------------
+static variable:
+it is common variable which will be used by all the objects.
+If we change, then all the objects will have this new value.
+
+And static variable should be called by their classname and not object.
+Thus static keyword means we are creating someone as a class member, not an object member.
+
+** ------------------
+static method:
+can be called by the classname only.
+
+static methods can only access static variable.
+we cannot use a non-static variable inside a static method.
+
+If we have the object reference, then we can use as then we can differentiate.
+public static void show(Demo obj){
+    --
+    obj.name etc...
+}
+
+** ------------------
+static block:
+It will be loaded only once
+
+Every time we get an object, there are 2 steps:
+1. class is loaded
+2. objects are instantiated
+
+class will be loaded only once.
+In JVM, we have a ClassLoader which has all the class which are loaded
+
+Also, class will be loaded only when object is created
+
+What if I want to load the class without creating object??
+Ans: We have a special class in Java known as Class 
+Class.forName(Demo);  --> this will load the class
+
+** ------------------
+this keyword --> refers to the current object which is calling the method.
+
+** ------------------
+Anonymous object
+
+new A();
+this creates a new object in the heap memory. Nothing in stack since it does not have any reference.
+Only problem is we can't reuse them.
+new A().show(); --> this will Working
+
+** ------------------
+Access modifiers:
+private    ->  same class
+default    ->  same package
+protected  ->  same class and package and if different package, then it should be subclass
+public     ->  everywhere
+
+** ------------------
+Polymorphism:
+
+A is class and B is subclass of A.
+
+A obj = new A();
+A obj = new B(); Note: this will call B's method if the method is overridden otherwise it only has access to A's methods.
+Thus it depends on what object we have. This is known as Dynamic Method Dispatch
+
+B obj = new B();  
+B obj = new A();  ---> NOT POSSIBLE
+
+** ------------------
+Object class:
+Every class in Java extend the Object class by default
+
+** ------------------
+Upcasting
+A is class and B is subclass of A.
+A obj = new B(); 
+OR 
+A obj = (A) new B(); --> this is Upcasting which is done by default.
+
+B obj1 = (B) obj;  --> this is Downcasting
+now we are not creating a new object but only a new reference. Now obj1 has access to both A's and B's methods.
+
+** ------------------
+Wrapper Class
+Java is not purely object oriented since it suporrts primitive data types.
+But it provides Wrapper class for every datatype.
+Eg:
+
+int num = 7;
+Integer num1 = num; //autoboxing
+int num2 = num1; //autounboxing
+
+** ------------------
+Abstract class
+
+-we cannot create object of abstract class but we can create a reference of it.
+-Car obj = new Wagonr();
+Car is abstract class and Wagonr extends the abstract class
+
+** ------------------
+Inner class
+
+class A{
+
+    int age;
+
+    public void show(){
+        System.out.println("A");
+    }
+
+    class B{
+        public void config(){
+            System.out.println("B");
+        }
+    }
+}
+
+class Hello{
+    public static void main(String[] args) {
+        
+        A obj = new A();
+        obj.show();
+
+        //to make B's object, first specify where it belongs to and then we need object of outer class
+        A.B obj1 = obj.new B();
+        obj1.config();
+    }
+}
+
+We can make the inner class static, then we don't need A's object
+class A{
+
+    int age;
+
+    public void show(){
+        System.out.println("A");
+    }
+
+    static class B{
+        public void config(){
+            System.out.println("B");
+        }
+    }
+}
+
+class Hello{
+    public static void main(String[] args) {
+
+        A.B obj1 = new A.B();
+        obj1.config();
+    }
+}
+
+This creates a new file A$B.class
+$ denotes inner class
+
+** ------------------
+Anonymous inner class
+class A{
+
+    public void show(){
+        System.out.println("A");
+    }
+
+}
+
+class Hello{
+    public static void main(String[] args) {
+
+        A obj = new A()
+        {
+            public void show(){
+                System.out.println("new show");
+            }
+        };
+        obj.show();
+    }
+}
+
+if we want to change implementation of show() method, we can use this.
+useful when we want to change implementation only once or less no of times.
+This is also an inner class
+we are not giving any name to it that's why a file is created Demo$1.class
+1 denotes name of class as 1 since no name was specified.
+
+
+Anonymous inner class can used with abstract class.
+When we want the implementation of a method only once, then no need of creating a separate class and overriding the method.
+we can use this concept
+
+abstract class A{
+
+    public abstract void show();
+
+}
+
+class Hello{
+    public static void main(String[] args) {
+
+        A obj = new A()
+        {
+            public void show(){
+                System.out.println("new show");
+            }
+        };
+        obj.show();
+    }
+}
+
+
+** ------------------
+Interface:
+Not a class
+Used when we only have abstract methods
+All the methods are public and abstract by default
+All the variable are final and static by default
+Interface does not have it's own memory so how can we create a non final variable. thus variables are final and static.
+
+interface A{
+    int age = 44; 
+    void show();
+}
+
+class B implements A{
+    public void show() {
+        System.out.println("show");
+    }
+}
+
+class Hello{
+    public static void main(String[] args) {
+        A b = new B();
+        b.show();
+        System.out.println(A.age); //static variable thus access by interface only.
+    }
+}
+
+
+--We can have one class implements multiple Interfaces
+thus multiple inheritance is possible in java using interface.
+
+--An interface can extend another interface
+interface X{
+    void show();
+}
+interface Y extends X{
+
+}
+
+class - class --> extends
+class - interface --> implements
+interface - interface --> extends
+
+** ------------------
+Enum:
+Java Enums can be thought of as classes which have a fixed set of named constants
+The main objective of an enum is to define our own data types(Enumerated Data Types).
+enum by default extends the Enum class which provides many methods.
+
+enum Status{
+    Running, Failed, Pending, Success;
+}
+
+class Hello {
+    public static void main(String[] args) {
+        
+        Status s = Status.Failed;
+        System.out.println(s);
+
+        //if we want to print all status
+        Status[] ss = Status.values();
+        for(Status a : ss) System.out.println(a + " : " + a.ordinal()); 
+        //ordinal means index
+        //Eg: Running : 0, Failed : 1 and so on
+        
+    }
+}
+
+-->we cannot extend enum with any other class. But all the other things that we do with class we can do with enum also 
+Eg: creating a constructor
+
+enum Laptop {
+    Macbook(2000), HP(1500), ThinkPad(1200);
+
+    private int price;
+
+    private Laptop(int price) {
+        this.price = price;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+}
+
+NOTE: We are creating a private constructor since we are creating the object in the same class itself.
+
+class Hello {
+    public static void main(String[] args) {
+
+        for (Laptop l : Laptop.values()) {
+            System.out.println(l + " : " + l.getPrice());
+        }
+    }
+}
+
+
+** ------------------
+Annotations:
+Useful to the programmer to debug
+most common is : @Override
+
+** ------------------
+Functional interface:
+Only 1 method in the interface
+@FunctionalInterface
+Put this before the interface, then we'll get the error if it is not Functional interface
+
+** ------------------
+Lambda Expression:
+
+We can use anonymous class to implement the method of interface
+
+@FunctionalInterface
+interface A {
+    void show();
+}
+
+class Hello {
+    public static void main(String[] args) {
+
+        A obj = new A() {
+            public void show() {
+                System.out.println("show");
+            }
+        };
+
+        obj.show();
+    }
+}
+
+-->We can also use Lambda Expression to do this.
+Lambda Expression only works with Functional interface.
+
+class Hello {
+    public static void main(String[] args) {
+
+        A obj = () -> 
+        {                    
+            System.out.println("show");
+        };
+
+        obj.show();
+    }
+}
+
+Eg of Lambda Expression which returns some value
+
+
+@FunctionalInterface
+interface A {
+    int add(int i, int j);
+}
+
+class Hello {
+    public static void main(String[] args) {
+
+        A obj = (int i, int j) -> {
+            return i + j;
+        };
+
+        int res = obj.add(2, 3);
+        System.out.println(res);
+    }
+}
+
+Now we can further shorten the code by removing the return type and also the data type
+A obj = (i, j) ->  i + j;
+
+** ------------------
+Types of Interface:
+1. Normal
+2. Functional/SAM(Single Abstract Method)
+3. Marker
+
+Marker interface is the one which has no methods.
+Examples of marker interface are Serializable, Cloneable and Remote interface.
+
+Serializable interface is present in java.io package. It is used to make an object eligible for saving its state into a file. This is called Serialization. 
+Classes that do not implement this interface will not have any of their state serialized or deserialized. All subtypes of a serializable class are themselves serializable.
+
+** ------------------
+Exception:
+1. try
+2. catch
+3. finally  --> useful when we want to close a resource
+4. throw
+5. throws
+
+--Custom Exception
+class NavinException extends Exception
+{
+	public NavinException(String string)
+	{
+		super(string);
+	}
+}
+public class Demo {
+    public static void main(String[] args) {
+    	
+    	int i=20;
+    	int j=0;
+
+    	try
+    	{
+    		j=18/i;
+    		if(j==0)
+    			throw new NavinException("I don't want to do print zero");
+    	}
+
+    	catch(ArithmeticException e)
+    	{
+    		j=18/i;
+    		System.out.println("that is default output"+e);
+    	}
+    	catch(Exception e)
+    	{
+  
+    		System.out.println("Something went wrong."+e);
+    	}
+    	System.out.println(j);
+    }
+}
+
+** ------------------
+Duckling Exception:
+To "duck an exception" means "not handle the exception". This actually explains the name: to duck means to "To evade; dodge".
+
+The method ducking the exception simply doesn't handle it (because, for example, it is not its purpose) and let the exception be thrown to the calling method.
+in other words, ignore it hoping that someone else will handle it :)
+
+class NavinException extends Exception
+{
+	public NavinException(String string)
+	{
+		super(string);
+	}
+}
+
+class A
+{
+	public void show() throws ClassNotFoundException
+	{
+//    	try
+//    	{
+//    		Class.forName("Calc");
+//    	}
+//    	catch(ClassNotFoundException e)
+//    	{
+//    		System.out.println("Not able to find theh class");
+//    	}
+		
+		Class.forName("Calc");
+	}
+}
+
+public class Demo {
+	
+    public static void main(String[] args) {
+    	
+//    	try
+//    	{
+//    		Class.forName("Class");
+//    	}
+//    	catch(ClassNotFoundException e)
+//    	{
+//    		System.out.println("Not able to find theh class");
+//    	}
+    	
+    	A obj=new A();
+    	try {
+    		obj.show();
+    	}catch(ClassNotFoundException e)
+    	{
+    		e.printStackTrace();
+    	}
+    }
+}
+
+here while declaring the method, we do not handle it but while calling the method, it is handled.
+
+** ------------------
+Taking User Inputs:
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
+
+public class Demo {
+    public static void main(String[] args) throws IOException{   	
+    	
+//    	System.out.println("Enter a number");
+//    	int num=System.in.read();
+//    	
+//  	System.out.println(num);
+//    	System.out.println(num-48);
+    	
+    	System.out.println("Enter a number");
+    	
+//    	InputStreamReader in=new InputStreamReader(System.in);
+//    	BufferedReader bf=new BufferedReader(in);
+    	
+//    	int num=Integer.parseInt(bf.readLine());
+//    	System.out.println(num);
+  //  	BufferedReader bf=new BufferedReader(null);
+  // 	System.out.println(num-48);
+    	
+    	Scanner sc=new Scanner(System.in);
+    	int num=sc.nextInt();
+    	System.out.println(num);
+    }
+}
+
+** ------------------
+Threads:
+
+----
+class A extends Thread
+{
+	public void run()
+	{
+		for(int i=1;i<=100;i++)
+		{
+			System.out.println("Hi");
+		}
+	}
+}
+
+class B extends Thread
+{
+	public void run()
+	{
+		for(int i=1;i<=100;i++)
+		{
+			System.out.println("Hello");
+		}
+	}
+}
+
+public class Hello {
+    public static void main(String[] args) throws NumberFormatException {   
+    	
+    	A obj1=new A();
+    	B obj2=new B();
+    	
+//    	obj1.show();
+//    	obj2.show();
+    	
+    	obj1.start();
+    	obj2.start();
+    }
+}
+
+----
+class A extends Thread
+{
+	public void run()
+	{
+		for(int i=1;i<=100;i++)
+		{
+			System.out.println("Hi");
+		}
+	}
+}
+
+class B extends Thread
+{
+	public void run()
+	{
+		for(int i=1;i<=100;i++)
+		{
+			System.out.println("Hello");
+		}
+	}
+}
+
+public class Hello {
+    public static void main(String[] args) throws NumberFormatException {   
+    	
+    	A obj1=new A();
+    	B obj2=new B();
+    	
+//    	obj1.show();
+//    	obj2.show();
+    	
+    	obj1.start();
+    	obj2.start();
+    }
+}
+
+-----
+class A implements Runnable
+{
+	public void run()
+	{
+		for(int i=1;i<=5;i++)
+		{
+			System.out.println("Hi");
+			try {
+				Thread.sleep(10);
+			}catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+class B implements Runnable
+{
+	public void run()
+	{
+		for(int i=1;i<=5;i++)
+		{
+			System.out.println("Hello");
+			try {
+				Thread.sleep(10);
+			}catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+public class Demo {
+    public static void main(String[] args) throws NumberFormatException {   
+    	
+//    	A obj1=new A();
+//    	B obj2=new B();
+//    	Runnable obj1=new A();
+//    	Runnable obj2=new B();
+    	
+    	
+//    	Runnable obj1=new Runnable()
+//    	{
+//    		public void run()
+//    		{
+//    			for(int i=1;i<=5;i++)
+//    			{
+//    				System.out.println("Hello");
+//    				try {
+//    					Thread.sleep(10);
+//    				}catch(InterruptedException e) {
+//    					e.printStackTrace();
+//    				}
+//    			}
+//    		}
+//   		};
+    	
+    	Runnable obj1=()->
+    	{
+    		for(int i=1;i<=5;i++)
+    		{
+    			System.out.println("Hi");
+    			try {Thread.sleep(10);}catch(InterruptedException e) {e.printStackTrace();}
+    		}
+    	};
+    	
+    	Runnable obj2=()->
+    	{
+    		for(int i=1;i<=5;i++)
+    		{
+    			System.out.println("Hello");
+    			try {Thread.sleep(10);}catch(InterruptedException e) {e.printStackTrace();}
+    		}
+    	};
+    	
+    	Thread t1=new Thread(obj1);
+    	Thread t2=new Thread(obj2);
+    	 	
+    	t1.start();
+    	t2.start();
+    }
+    
+}
+
+-----
+class Counter
+{
+	int count;
+//	public void increment()
+	public synchronized void increment()   
+	{
+		count++;
+	}
+}
+ 
+//use synchronized keyword so that increment() is called only once at the same time
+
+public class Demo {
+    public static void main(String[] args) throws InterruptedException{   
+    	
+    	Counter c=new Counter();
+    	
+    	Runnable obj1=()->
+    	{
+    		for(int i=1;i<=10000;i++)
+    		{
+    			c.increment();
+    		}
+    	};
+    	
+    	Runnable obj2=()->
+    	{
+    		for(int i=1;i<=10000;i++)
+    		{
+    			c.increment();
+    		}
+    	};
+    	
+    	Thread t1=new Thread(obj1);
+    	Thread t2=new Thread(obj2);
+    	 	
+    	t1.start();
+    	t2.start();
+    	
+    	t1.join();
+    	t2.join();
+    	
+    	System.out.println(c.count);
+    }
+}
+
+-----
+Thread States:
+- New State   
+- Runnable State  ->  start() method
+- Running State     -> a thead is running with run() method 
+- Waiting State	    -> sleep(),  wait() method
+- Dead State
+
+Through notify(), you will go to waiting state to runnable state.
+From Running, Runnable state to dead state through stop() method.
+
+** ------------------
+Stream API:
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class Hello {
+    public static void main(String[] args) throws NumberFormatException {   
+    	
+    	List<Integer> nums = Arrays.asList(4,5,7,8,9,10,11);
+
+        Stream<Integer> s1 = nums.stream();
+        //now whatever changes we make to s1 will not affect the nums array.
+
+        s1.forEach(n -> System.out.println(n));
+        
+        //we can use stream only once
+        // s1.forEach(n -> System.out.println(n));
+        //this is throw error at runtime since we already used s1 once.
+
+        //Stream has many methods to work with.
+        Stream<Integer> s2 = s1.filter(n -> n%2 == 0); //We have to put the condition in the filter method. Eg: here s2 will have only even no
+
+        Stream<Integer> s3 = s2.map(n -> n*2); //will double the values in s2
+
+        int res = s3.reduce(0, (c,e) -> c+e); //it will reduce to give a single value. we can reduce by performing any operation as desired
+
+        //we can perform all in one only.
+        int result = nums.stream().filter(n -> n%2 == 0).map(n -> n*2).reduce(0, (c,e) -> c+e);
+
+
+    }
+}
+
+** ------------------
+Optional Class:
+
+To avoid the null pointer exception
+
+Eg:
+import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+public class Hello {
+    public static void main(String[] args) throws NumberFormatException {   
+    	
+        List<String> names = Arrays.asList("Tushar", "Rohit", "Pratham");
+
+        Optional<String> name = names.stream()
+                                    .filter(str -> str.contains("x"))
+                                    .findFirst()
+                                    .orElse("Not Found");
+
+        System.out.println(name);
+    }
+}
+
+** ------------------
+Method reference:
+
+import java.util.Arrays;
+import java.util.List;
+
+public class Hello {
+    public static void main(String[] args) throws NumberFormatException {   
+    	
+        List<String> names = Arrays.asList("Tushar", "Rohit", "Pratham");
+
+        // names.forEach(s -> System.out.println(s));
+        names.forEach(System.out :: println);  //method reference
+
+        List<String> uNames = names.stream().map(String :: toUpperCase).toList();
+        //method reference(instead of using .map(s -> s.toUpperCase()))
+    }
+}
+
+** ------------------
+Constructor reference:
+Same as method reference, we can give constructor reference also.
+
+Eg: new object creation in map method.
+students = names.stream().map(name -> new Student(name))
+
+//instead we can use this:
+students = names.stream().map(Student::new)
+
+Student is the class.
