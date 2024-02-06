@@ -33,3 +33,20 @@ public class DemoApplication {
 	}
 
 }
+
+
+//NOTE: Autowiring
+/*
+when one class is dependent on another class.
+Eg. main is dependent on alien class and alien is dependent on some laptop class
+*/
+
+public class Alien {
+	
+    @Autowired
+    Laptop laptop;
+	
+    public void alien(){
+        laptop.compile();
+    }
+}
